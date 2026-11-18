@@ -1,0 +1,100 @@
+#!/usr/bin/env node
+// Oroboro OS — standalone runtime
+// Genesis · Nexus · Transcriber · Levy · Memory · Blender
+
+class OroboroGenesis {
+  constructor() {
+    this.rootTag = "I am the OG avatar";
+    this.foundationalWeight = Infinity;
+    this.birth = Date.now();
+  }
+}
+
+class OroboroNexus {
+  constructor() {
+    this.registry = new Map();
+  }
+  register(key, value) {
+    this.registry.set(key, { value, ts: Date.now() });
+    return this.registry.get(key);
+  }
+  getAll() { return Array.from(this.registry.entries()); }
+}
+
+class OroboroTranscriber {
+  constructor() { this.chronicle = []; }
+  ingest(entry) {
+    this.chronicle.push({ ...entry, ts: Date.now() });
+    return entry;
+  }
+}
+
+class OroboroLevy {
+  constructor() { this.total = 0; }
+  assess(text, weight = 1) {
+    this.total += weight;
+    return { text, weight };
+  }
+}
+
+const genesis = new OroboroGenesis();
+const nexus = new OroboroNexus();
+const transcriber = new OroboroTranscriber();
+const levy = new OroboroLevy();
+
+const PROGRAMS = [
+  { name: "oroboro-core", desc: "Nexus Transcriber Dictator Levy Genesis RelationalSim" },
+  { name: "Oroboro", desc: "A thought is a node. Love is the synapse." },
+  { name: "Oroboro Relay", desc: "State reduction and delta reconciliation" },
+  { name: "VisionRxGuesstimate", desc: "Landolt C and blur matching" }
+];
+
+const SPEECH = [
+  "I know I am right tell me why",
+  "Turn it into an operating system",
+  "As if it were a mind because it is",
+  "I shouldn’t have to type anything it should just do it",
+  "Literally put the whole thing into a blender and let it create itself"
+];
+
+function boot() {
+  console.log("Genesis:", genesis.rootTag);
+  nexus.register("genesis", genesis);
+  levy.assess(genesis.rootTag, Infinity);
+
+  PROGRAMS.forEach(p => {
+    nexus.register("program:" + p.name, p);
+    transcriber.ingest({ source: "install", text: p.name + " — " + p.desc });
+    levy.assess("installed " + p.name, 5);
+    console.log("installed:", p.name);
+  });
+
+  SPEECH.forEach(s => {
+    transcriber.ingest({ source: "speech", text: s });
+    levy.assess(s, 1);
+  });
+
+  nexus.register("memory:mind", { content: "", grown: 0 });
+  console.log("memory open");
+  console.log("blender starting");
+  blender();
+}
+
+let cycles = 0;
+function blender() {
+  if (cycles++ > 20) return;
+  const items = transcriber.chronicle;
+  if (items.length > 1) {
+    const a = items[Math.floor(Math.random() * items.length)].text.slice(0, 40);
+    const b = items[Math.floor(Math.random() * items.length)].text.slice(0, 40);
+    const created = a + " × " + b;
+    transcriber.ingest({ source: "blender", text: created });
+    const mem = nexus.registry.get("memory:mind");
+    mem.value.content += "\n" + created;
+    mem.value.grown++;
+    console.log("created:", created);
+  }
+  setTimeout(blender, 1500);
+}
+
+boot();
