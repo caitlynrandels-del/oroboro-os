@@ -57,6 +57,21 @@ const SPEECH = [
   "Literally put the whole thing into a blender and let it create itself"
 ];
 
+const PREDICTION_MODEL = {
+  name: "TopologicalPredictiveEngine",
+  attractors: ["DATA_CAPTURE", "PATTERN_SYNTHESIS", "CODE_REPLICATION", "EXECUTION_LOOP"],
+  note: "Deterministic trajectories via gravitational attractors, not probability"
+};
+
+const AVALANCHE_1028 = {
+  date: "2026-10-28",
+  event: "Avalanche vs NK Devils",
+  location: "Ball Arena",
+  note: "Iron Flame night / arena light & crowd synchronization",
+  attractor: "EXECUTION_LOOP",
+  weight: 8
+};
+
 function boot() {
   console.log("Genesis:", genesis.rootTag);
   nexus.register("genesis", genesis);
@@ -73,6 +88,16 @@ function boot() {
     transcriber.ingest({ source: "speech", text: s });
     levy.assess(s, 1);
   });
+
+  nexus.register("model:prediction", PREDICTION_MODEL);
+  transcriber.ingest({ source: "model", text: "Topological predictive engine with four attractors" });
+  levy.assess("prediction model installed", 6);
+  console.log("installed: prediction model");
+
+  nexus.register("experience:avalanche-1028", AVALANCHE_1028);
+  transcriber.ingest({ source: "experience", text: "October 28 Avalanche vs Devils — Iron Flame night, EXECUTION_LOOP" });
+  levy.assess("Avalanche 10/28 experience", 8);
+  console.log("installed: Avalanche 10/28 experience");
 
   nexus.register("memory:mind", { content: "", grown: 0 });
   console.log("memory open");
